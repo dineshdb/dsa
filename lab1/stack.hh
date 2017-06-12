@@ -1,3 +1,6 @@
+#ifndef MSTACK_HH
+#define MSTACK_HH
+
 class StackUnderflow {};
 
 template <class T>
@@ -6,38 +9,14 @@ class Stack {
 	int capacity = 0;
 	T *data = nullptr;
 
-	void resize(){
-		if(top >= capacity) {
-			capacity *= 2;
-			T *ndata = new T[capacity];
-			for(int i = 0 ; i < top ; i++){
-				*(ndata +i) = *(data + i);
-			}
-			delete[] data;
-			data = ndata;
-		}
-	}
+	void resize();
 
 public:
-	Stack(){
-		capacity = 10;
-		data = new T[capacity];
-	}
-	void push(T d){
-		resize();
-		*(data + top++) = d;
-	}
-	T pop(){
-		if(top < 0)
-			throw StackUnderflow();
-		return *(data + --top );
-	}
-
-	bool isEmpty(){
-		return top == 0;
-	}
-
-	int getCapacity(){
-		return capacity;
-	}
+	Stack();
+	void push(T d);
+	T pop();
+	bool isEmpty();
+	int getCapacity();
 };
+
+#endif
