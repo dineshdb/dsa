@@ -7,6 +7,7 @@ template<class T> class Node {
 public:
 	T data;
 	Node *next = nullptr;
+	Node *prev = nullptr;
 	Node(T d) : data(d){}
 };
 
@@ -38,13 +39,19 @@ public:
 		for(int count = 0; count < pos-1 && (s && s->next); s = s->next, count ++);
 		if(s){
 			node->next = s->next;
+			node->prev = s;
 			s->next = node;
+			// We might be at the end of list
+			if(node->next)
+				node->next->prev = node;
 		} else start = node;
 	}
 	void remove(int pos){
 		Node<T> *prev = getNode(pos-1);
 		Node<T> *cur  = prev->next;
+		Node<T> *next = cur->next;
 		prev-> next = cur -> next;
+		next->prev = prev;
 		delete cur;
 	}
 	Node<T> *getNode(int pos){
@@ -77,3 +84,4 @@ int main(){
 
 	return 0;
 }
+
