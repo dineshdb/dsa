@@ -1,6 +1,8 @@
 #include <iostream>
 using namespace std;
 
+class NotFound{};
+
 template<class T>
 class Node{
 public:
@@ -43,6 +45,13 @@ Node<T> *root = nullptr;
 		}
 	}
 
+	Node<T>* _find(T key, Node<T>* root = nullptr){
+		if(root = nullptr)
+			throw NotFound();
+
+		return root->data == key ? root :root->data < key ? _find(root->right,key) : _find(root->left, key);
+    }
+
 public:
 	void insert(T d, Node<T> **n = nullptr){
 		// User didn't specify any node, let's assume it's the root.
@@ -82,9 +91,9 @@ public:
 	void bfs(){
 
 	}
-
-	void find(){
-	}
+    Node<T>* find(T key, Node<T>* node = nullptr){
+    	return _find(node == nullptr ? root : node);
+    }
 	void minNode(){
 	}
 	void maxNode(){
