@@ -68,6 +68,10 @@ public:
 		}
 	}
 
+	bool isEmpty(){
+		return root == nullptr;
+	}
+
 	Node<T> *getRoot(){
 		return root;
 	}
@@ -94,10 +98,31 @@ public:
     Node<T>* find(T key, Node<T>* node = nullptr){
     	return _find(node == nullptr ? root : node);
     }
-	void minNode(){
-	}
-	void maxNode(){
-	}
+    Node<T>* maxNode(Node<T>* root = nullptr){
+    	// If no parameter is found, assume tree root as the root.
+    	if (root == nullptr){
+    		root = this->root;
+    	}
+        if (this->isEmpty()){
+			throw NotFound();
+        }
+
+        for (; root->right != nullptr; root = root->right);
+        return root;
+    }
+    Node<T>* minNode(Node<T>* root = nullptr){
+    	// If no parameter is found, assume tree root as the root.
+    	if (root == nullptr){
+    		root = this->root;
+    	}
+
+        if (this->isEmpty()){
+			throw NotFound();
+        }
+
+        for (; root->left != nullptr; root = root->left);
+        return root;
+    }
 };
 
 int main(){
@@ -105,5 +130,6 @@ int main(){
 	t.insert(10);
 	t.insert(5);
 	t.insert(15);
-	cout << t.height() << endl;
+
+	cout << t.minNode()->data << endl;
 }
