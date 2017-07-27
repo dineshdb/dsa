@@ -98,11 +98,8 @@ public:
     Node<T>* find(T key, Node<T>* node = nullptr){
     	return _find(node == nullptr ? root : node);
     }
-    Node<T>* maxNode(Node<T>* root = nullptr){
-    	// If no parameter is found, assume tree root as the root.
-    	if (root == nullptr){
-    		root = this->root;
-    	}
+    Node<T>* maxNode(){
+   		root = this->root;
         if (this->isEmpty()){
 			throw NotFound();
         }
@@ -110,12 +107,8 @@ public:
         for (; root->right != nullptr; root = root->right);
         return root;
     }
-    Node<T>* minNode(Node<T>* root = nullptr){
-    	// If no parameter is found, assume tree root as the root.
-    	if (root == nullptr){
-    		root = this->root;
-    	}
-
+    Node<T>* minNode(){
+		Node<T> *root = this->root;
         if (this->isEmpty()){
 			throw NotFound();
         }
