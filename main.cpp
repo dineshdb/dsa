@@ -1,6 +1,5 @@
 // dynamic implementation of a simple binary tree
 #include <iostream>
-#include<cstdlib>
 #include <stack>
 #include <vector>
 #include <queue>
@@ -98,38 +97,80 @@ public:
         }
     }
 
-    Node* deleteNode(Node* root, int key)
-    {
-        if (root == NULL) return root;
-
-        if (key < root->data)
-            root->left = deleteNode(root->left, key);
-
-        else if (key > root->data)
-            root->right = deleteNode(root->right, key);
-
-        else
-        {
-            if (root->left == NULL)
-            {
-                Node* temp = root->right;
-                free(root);
-                return temp;
-            }
-            else if (root->right == NULL)
-            {
-                Node *temp = root->left;
-                free(root);
-                return temp;
-            }
-
-            Node* temp = minElement(root->right);
-
-            root->data = temp->data;
-
-            root->right = deleteNode(root->right, temp->data);
+    void deleteNode(Node* tree, int key){
+        if (tree == nullptr){
+            cout << "Empty tree : cannot delete" << endl;
+            return;
         }
-        return root;
+
+        Node *parent = tree, *top = tree;
+        while (top != nullptr){
+            if (top->data == key){
+                break;
+            }
+            parent = top;
+            if (top->data > key){
+                top = top->left;
+            } else {
+                top = top->right;
+            }
+        }
+
+        if (top == nullptr){
+            cout << "No matching element found " << endl;
+            return;
+        }
+
+        cout << "top data " << top->data << endl;
+        cout << "parent data " << parent->data << endl;
+
+        if (top->left == nullptr && top->right == nullptr){
+            if (parent->left == top){
+                parent->left = nullptr;
+            } else {
+                parent->right = nullptr;
+            }
+            cout << "I am at leaf node " << endl;
+        } else if (top->left != nullptr && top->right == nullptr){
+            if (parent->left == top){
+                parent->left = top->left;
+            } else {
+                parent->right = top->left;
+            }
+            cout << "I have only a left child " << endl;
+        } else if (top->right != nullptr && top->left == nullptr){
+            if (parent->left == top){
+                parent->left = top->right;
+            } else {
+                parent->right = top->right;
+            }
+            cout << "I have only a right child " << endl;
+        } else {
+            cout << "I have two child " << endl;
+            Node *minRight = top->right, *parentMinRight = top->right;
+
+            for (; minRight->left != nullptr; minRight = minRight->left){
+                parentMinRight = minRight;
+            }
+
+            cout << "minRight data " << minRight->data << endl;
+            cout << "parentMinRight data " << parentMinRight->data << endl;
+
+            if (top->right == minRight){
+                minRight->left = top->left;
+            } else {
+                parentMinRight->left = minRight->right;
+                minRight->right = top->right;
+                minRight->left = top->left;
+            }
+            if (top != tree)
+                if (parent->left == top){
+                    parent->left = minRight;
+                } else {
+                    parent->right = minRight;
+                }
+        }
+        delete top;
     }
 
 
@@ -221,7 +262,7 @@ int main(){
     cout << "max: " << t.maxElement(root)->data << endl;
     //cout << "min: " << t.minElement(root) << endl;
     cout << "height: " << t.height(root) << endl;
-    root = t.deleteNode(root, 8);
+    t.deleteNode(root, 8);
     t.display(root);
     cout << "Breadth first search: " << endl;
     t.breadthFristSearch(root);
