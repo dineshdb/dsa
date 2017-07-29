@@ -123,6 +123,7 @@ int main(){
 	t.insert(10);
 	t.insert(5);
 	t.insert(15);
+	t.traversePreOrder();
 
-	cout << t.minNode()->data << endl;
+	//cout << t.minNode()->data << endl;
 }
