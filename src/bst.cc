@@ -98,7 +98,7 @@ public:
     Node<T>* find(T key, Node<T>* node = nullptr){
     	return _find(node == nullptr ? root : node);
     }
-    Node<T>* maxNode(){
+    Node<T>* maxNode(Node<T>* root){
    		root = this->root;
         if (this->isEmpty()){
 			throw NotFound();
@@ -107,23 +107,64 @@ public:
         for (; root->right != nullptr; root = root->right);
         return root;
     }
-    Node<T>* minNode(){
-		Node<T> *root = this->root;
+    Node<T>* minNode(Node<T>* root){
+		root = this->root;
         if (this->isEmpty()){
 			throw NotFound();
         }
-
         for (; root->left != nullptr; root = root->left);
         return root;
+    }
+    Node<T>* _deleteNode(Node<T>* root, T key)
+    {
+        if(root==nullptr) return root;
+        if (key < root->data)
+            root->left = _deleteNode(root->left, key);
+        else if (key > root->data)
+            root->right = _deleteNode(root->right, key);
+        else
+        {
+            if (root->left == nullptr)
+            {
+                Node<T>* temp = root->right;
+                delete root;
+                return temp;
+            }
+            else if (root->right == nullptr)
+            {
+                Node<T>* temp = root->left;
+                delete root;
+                return temp;
+            }
+            Node<T>* temp = minNode(root->right);
+            root->data = temp->data;
+            root->right = _deleteNode(root->right, temp->data);
+        }
+        return root;
+    }
+    Node<T>* deleteNode(T key, Node<T>* root = nullptr)
+    {
+        if(root == nullptr) {
+            root = this->root;
+            if (root == nullptr)
+                return root;
+        }
+        _deleteNode(root, key);
     }
 };
 
 int main(){
 	BST<int> t;
+	Node<int>* root = nullptr;
 	t.insert(10);
 	t.insert(5);
 	t.insert(15);
+	t.insert(20);
+	t.insert(25);
+	t.insert(22);
+	t.deleteNode(15);
 	t.traversePreOrder();
+	return 0;
 
 	//cout << t.minNode()->data << endl;
 }
