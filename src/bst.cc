@@ -23,7 +23,7 @@ Node<T> *root = nullptr;
 	}
 	void _traversePreOrder(Node<T> *node = nullptr){
 		if(node != nullptr){
-			cout << node -> data << endl;
+			cout << node -> data << "\t";
 			_traversePreOrder(node->left);
 			_traversePreOrder(node->right);
 		}
@@ -32,7 +32,7 @@ Node<T> *root = nullptr;
 	void _traverseInOrder(Node<T> *node = nullptr){
 		if(node != nullptr){
 			_traverseInOrder(node->left);
-			cout << node -> data << endl;
+			cout << node -> data << "\t";
 			_traverseInOrder(node->right);
 		}
 	}
@@ -41,15 +41,15 @@ Node<T> *root = nullptr;
 		if(node != nullptr){
 			_traversePostOrder(node->left);
 			_traversePostOrder(node->right);
-			cout << node -> data << endl;
+			cout << node -> data << "\t";
 		}
 	}
 
-	Node<T>* _find(T key, Node<T>* root = nullptr){
+	Node<T>* _find(T key, Node<T>* root){
 		if(root = nullptr)
 			throw NotFound();
 
-		return root->data == key ? root :root->data < key ? _find(root->right,key) : _find(root->left, key);
+		return root->data == key ? root :root->data < key ? _find(key,root->right) : _find(key,root->left);
     }
 
 public:
@@ -66,6 +66,19 @@ public:
 		} else {
 			insert(d, &(*n)->right);
 		}
+	}
+
+	void insert(T d1, T d2)
+	{
+	    insert(d1);
+	    insert(d2);
+	}
+
+	void insert(T d1, T d2, T d3)
+	{
+	    insert(d1);
+	    insert(d2);
+	    insert(d3);
 	}
 
 	bool isEmpty(){
@@ -96,10 +109,11 @@ public:
 
 	}
     Node<T>* find(T key, Node<T>* node = nullptr){
-    	return _find(node == nullptr ? root : node);
+    	return _find(key,node == nullptr ? root : node);
     }
-    Node<T>* maxNode(Node<T>* root){
-   		root = this->root;
+    Node<T>* maxNode(Node<T>* root = nullptr){
+        if(root == nullptr)
+            root = this->root;
         if (this->isEmpty()){
 			throw NotFound();
         }
@@ -107,8 +121,9 @@ public:
         for (; root->right != nullptr; root = root->right);
         return root;
     }
-    Node<T>* minNode(Node<T>* root){
-		root = this->root;
+    Node<T>* minNode(Node<T>* root = nullptr){
+        if(root == nullptr)
+            root = this->root;
         if (this->isEmpty()){
 			throw NotFound();
         }
@@ -156,14 +171,18 @@ public:
 int main(){
 	BST<int> t;
 	Node<int>* root = nullptr;
-	t.insert(10);
-	t.insert(5);
-	t.insert(15);
-	t.insert(20);
+	t.insert(10, 5, 15);
+	t.insert(20, 25);
 	t.insert(25);
-	t.insert(22);
+	t.traverseInOrder();
+	cout<<endl<<endl;
+	cout<<t.height()<<endl<<endl;
 	t.deleteNode(15);
 	t.traversePreOrder();
+	cout<<endl<<endl;
+	cout<<t.maxNode()->data<<endl<<endl;
+	cout<<t.minNode()->data<<endl<<endl;
+	t.traversePostOrder();
 	return 0;
 
 	//cout << t.minNode()->data << endl;
