@@ -170,7 +170,6 @@ public:
 
 int main(){
 	BST<int> t;
-	Node<int>* root = nullptr;
 	t.insert(10, 5, 15);
 	t.insert(20, 25);
 	t.insert(25);
